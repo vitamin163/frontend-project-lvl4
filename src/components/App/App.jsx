@@ -1,26 +1,14 @@
 import React from 'react';
-import { connect } from 'react-redux';
-// import * as actions from '../../actions';
+// import { connect } from 'react-redux';
+import Channels from '../Channels/Channels';
 
-const mapStateToProps = (state) => {
-  const props = {
-    channels: state.channelsState,
-  };
-  return props;
-};
 
-class App extends React.PureComponent {
+export default class App extends React.PureComponent {
   render() {
-    const { channels } = this.props;
-    const { byId, allIds } = channels;
     return (
-      <ul>
-        {allIds.map((id) => (
-          <li key={id}>{byId[id].name}</li>
-        ))}
-      </ul>
+      <div className="overflow-auto">
+        <Channels />
+      </div>
     );
   }
 }
-
-export default connect(mapStateToProps)(App);
