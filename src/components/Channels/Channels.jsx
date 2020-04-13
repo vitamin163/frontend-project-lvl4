@@ -1,6 +1,7 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { actions } from '../../slices';
 
 const mapStateToProps = (state) => {
   const props = {
@@ -10,19 +11,33 @@ const mapStateToProps = (state) => {
   return props;
 };
 
-class Channels extends React.PureComponent {
-  render() {
-    const { channels, currentChannelId } = this.props;
-    const { byId, allIds } = channels;
-    return (
-      <ListGroup as="ul">
-        {allIds.map((id) => (
-          <ListGroup.Item active={currentChannelId === id} key={id}>{byId[id].name}</ListGroup.Item>
-        ))}
-      </ListGroup>
-    );
-  }
-}
+const mapDispatchToProps = {
+  channelSelection: actions.channelSelection,
+};
+
+const Channels = (props) => {
+  const channelSelectionHandler = (id) => () => {
+    const { channelSelection } = props;
+    channelSelection({ id });
+  };
 
 
-export default connect(mapStateToProps)(Channels);
+  const { channels, currentChannelId } = props;
+  const { byId, allIds } = channels;
+  return (
+    <ListGroup as="ul">
+      {allIds.map((id) => (
+        <ListGroup.Item
+          active={currentChannelId === id}
+          key={id}
+          onClick={channelSelectionHandler(id)}
+        >
+          {byId[id].name}
+        </ListGroup.Item>
+      ))}
+    </ListGroup>
+  );
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Channels);
