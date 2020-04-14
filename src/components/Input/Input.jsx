@@ -37,7 +37,7 @@ const Input = (props) => {
     >
       <Form>
         <Field name="message">
-          {({ field, formProps }) => (
+          {({ field }) => (
             <FormGroup controlId="message">
               <FormLabel>message</FormLabel>
               <FormControl type="text" value={field.value} onChange={field.onChange} placeholder="message" />

@@ -11,7 +11,7 @@ const slice = createSlice({
       console.log(action.payload);
       return console.log('success');
     },
-    addMessageFailure(state, action) {
+    addMessageFailure() {
       // console.log(action.payload);
       console.log('failure');
     },
@@ -33,7 +33,7 @@ const addMessageActions = (message) => async (dispatch) => {
     dispatch(addMessageSuccess(response));
   } catch (e) {
     console.log(e);
-    // dispatch(addMessageFailure(e));
+    dispatch(addMessageFailure(e));
   }
 };
 
