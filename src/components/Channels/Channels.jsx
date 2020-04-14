@@ -22,8 +22,8 @@ const Channels = (props) => {
   };
 
 
-  cons { channels, currentChannelId } = props;
-  const { byId, allIds } = channels;
+  const { channels, currentChannelId } = props;
+  cons { byId, allIds } = channels;
   return (
     <ListGroup as="ul">
       {allIds.map((id) => (
