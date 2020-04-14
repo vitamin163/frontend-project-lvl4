@@ -15,7 +15,8 @@
     "build-app": "NODE_ENV=production npx webpack -p --env production",
     "build": "npm run build-app && npm run build-server",
     "start": "dist/bin/slack.js",
-    "postinstall": "npm run build"
+    "postinstall": "npm run build",
+    "eslint": "npx eslint . --ext js,jsx"
   },
   "repository": {
     "type": "git",
@@ -28,7 +29,7 @@
   },
   "lint-staged": {
     "*.{js, jsx}": [
-      "node_modules/.bin/eslint --max-warnings=0",
+      "npx eslint . --max-warnings=0"
     ]
   },
   "author": "Vitaliy Domnin",
