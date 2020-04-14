@@ -1,22 +1,24 @@
 // @ts-check
+const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
-// const isDevelopment = !isProduction;
-console.log(process.env.NODE_ENV);
-console.log('isProduction', isProduction);
+const isDevelopment = !isProduction;
+
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: [
     `${__dirname}/src/index.js`,
   ],
-
   externals: {
     gon: 'gon',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
+    alias: {
+      '@': path.resolve(__dirname, 'src/'),
+    },
   },
   output: {
     path: `${__dirname}/dist/public`,
@@ -28,10 +30,7 @@ module.exports = {
   },
   devtool: isProduction ? 'source-map' : 'eval-sourcemap',
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: isProduction ? '[name].[hash].css' : '[name].css',
-      chunkFilename: isProduction ? '[id].[hash].css' : '[id].css',
-    }),
+    new MiniCssExtractPlugin(),
   ],
   module: {
     rules: [
@@ -41,21 +40,39 @@ module.exports = {
         use: 'babel-loader',
       },
       {
-        test: /\.(sa|sc|c)ss$/,
+        test: /\.css$/,
         use: [
-          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          { loader: 'css-loader' },
-          { loader: 'postcss-loader' },
-          { loader: 'sass-loader' },
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              reloadAll: true,
+              sourceMap: isDevelopment,
+              hmr: isDevelopment,
+            },
+          },
+          { loader: 'css-loader', options: { importLoaders: 1, sourceMap: isDevelopment } },
+          { loader: 'postcss-loader', options: { sourceMap: isDevelopment } },
         ],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/,
-        use: ['file-loader'],
+        test: /\.(scss|sass)$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              reloadAll: true,
+              sourceMap: isDevelopment,
+              hmr: isDevelopment,
+            },
+          },
+          { loader: 'css-loader', options: { importLoaders: 1, sourceMap: isDevelopment } },
+          { loader: 'postcss-loader', options: { sourceMap: isDevelopment } },
+          { loader: 'sass-loader', options: { sourceMap: isDevelopment } },
+        ],
       },
       {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: ['file-loader'],
+        test: /\.jpe?g$|\.ico$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/,
+        loader: 'file-loader?name=[name].[ext]',
       },
     ],
   },
