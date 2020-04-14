@@ -22,7 +22,7 @@ const Channels = (props) => {
   };
 
 
-  const { channels, currentChannelId } = props;
+  cons { channels, currentChannelId } = props;
   const { byId, allIds } = channels;
   return (
     <ListGroup as="ul">
