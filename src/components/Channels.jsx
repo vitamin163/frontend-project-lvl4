@@ -1,7 +1,7 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { actions } from '../../slices';
+import { actions } from '../slices';
 
 const mapStateToProps = (state) => {
   const props = {

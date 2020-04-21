@@ -23,6 +23,7 @@ module.exports = {
   output: {
     path: `${__dirname}/dist/public`,
     publicPath: '/assets/',
+
   },
   devServer: {
     overlay: true,
@@ -50,8 +51,8 @@ module.exports = {
               hmr: isDevelopment,
             },
           },
-          { loader: 'css-loader', options: { importLoaders: 1, sourceMap: isDevelopment } },
-          { loader: 'postcss-loader', options: { sourceMap: isDevelopment } },
+          { loader: 'css-loader' },
+          { loader: 'postcss-loader' },
         ],
       },
       {
@@ -65,14 +66,14 @@ module.exports = {
               hmr: isDevelopment,
             },
           },
-          { loader: 'css-loader', options: { importLoaders: 1, sourceMap: isDevelopment } },
-          { loader: 'postcss-loader', options: { sourceMap: isDevelopment } },
-          { loader: 'sass-loader', options: { sourceMap: isDevelopment } },
+          { loader: 'css-loader' },
+          { loader: 'postcss-loader' },
+          { loader: 'sass-loader' },
         ],
       },
       {
-        test: /\.jpe?g$|\.ico$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/,
-        loader: 'file-loader?name=[name].[ext]',
+        test: /\.(png|svg|jpg|jpeg|gif)$/,
+        loader: 'url-loader',
       },
     ],
   },

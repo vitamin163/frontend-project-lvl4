@@ -7,7 +7,6 @@ const slice = createSlice({
   initialState: 1,
   reducers: {
     channelSelection(state, { payload: { id } }) {
-      console.log(id);
       return id;
     },
   },
