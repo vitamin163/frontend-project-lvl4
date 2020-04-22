@@ -11,7 +11,9 @@ import reducers, { actions } from './slices';
 import App from './components/App';
 import UserContext from './context/UserContext';
 
-const { initState, addMessage, addChannel } = actions;
+const {
+  initState, addMessage, addChannel, renameChannel,
+} = actions;
 
 const userName = cookies.get('user') || faker.internet.userName();
 cookies.set('user', userName, { expires: 365 });
@@ -27,6 +29,7 @@ export default (gon) => {
   const socket = io(`http://localhost:${port}`);
   socket.on('newMessage', (data) => store.dispatch(addMessage(data)));
   socket.on('newChannel', (data) => store.dispatch(addChannel(data)));
+  socket.on('renameChannel', (data) => store.dispatch(renameChannel(data)));
   store.dispatch(initState({ ...gon }));
   render(
     <Provider store={store}>

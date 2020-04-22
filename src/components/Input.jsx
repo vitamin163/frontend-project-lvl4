@@ -21,7 +21,7 @@ const validationMessage = Yup.object().shape({
     .required(<Alert variant="warning">Write message</Alert>),
 });
 
-class Input extends React.Component {
+class Input extends React.PureComponent {
   constructor(props) {
     super(props);
     this.textInput = React.createRef();

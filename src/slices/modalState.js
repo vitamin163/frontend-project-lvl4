@@ -3,10 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const slice = createSlice({
   name: 'modalState',
-  initialState: false,
+  initialState: { show: false },
   reducers: {
     showModal(state, { payload }) {
       return payload;
+    },
+    closeModal(state) {
+      return { ...state, show: false };
     },
   },
 });

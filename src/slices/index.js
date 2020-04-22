@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import channels, { actions as channelsActions } from './channels';
 import messages, { actions as messagesActions } from './messages';
 import submitState, { actions as submitActions } from './submitState';
-import submitMessageAction from './submitMessageAction';
+import submitAsyncAction from './submitAsyncAction';
 import currentChannelId, { actions as currentChannelIdActions } from './currentChannelId';
 import modalState, { actions as modalAction } from './modalState';
 
@@ -23,7 +23,7 @@ const actions = {
 };
 
 const asyncActions = {
-  submitMessageAction,
+  submitAsyncAction,
 };
 
 export { actions, asyncActions };

@@ -9,6 +9,10 @@ const slice = createSlice({
       const updateAllIds = [...state.allIds, channel.id];
       return { byId: updateById, allIds: updateAllIds };
     },
+    renameChannel(state, { payload: { data: { attributes: channel } } }) {
+      const updateById = { ...state.byId, [channel.id]: channel };
+      return { ...state, byId: updateById };
+    },
     initState(state, { payload }) {
       const { channels } = payload;
       const allIds = channels.map((channel) => channel.id);

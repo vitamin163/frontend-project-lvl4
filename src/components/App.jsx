@@ -8,6 +8,7 @@ import MessageList from './MessageList';
 import AddChannel from './AddChannel';
 import { asyncActions } from '../slices';
 import routes from '../routes';
+import Modal from './Modal';
 
 const mapStateToProps = (state) => {
   const props = {
@@ -17,12 +18,12 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  submitMessageAction: asyncActions.submitMessageAction,
+  submitAsyncAction: asyncActions.submitAsyncAction,
 };
 
 class App extends React.Component {
   submitMesssageHandler = (textInput) => async ({ text }, { resetForm }) => {
-    const { currentChannelId, submitMessageAction } = this.props;
+    const { currentChannelId, submitAsyncAction } = this.props;
     const url = routes.channelMessagesPath(currentChannelId);
     const userName = this.context;
     const data = {
@@ -31,7 +32,7 @@ class App extends React.Component {
         author: userName,
       },
     };
-    await submitMessageAction(data, url, resetForm);
+    await submitAsyncAction('post', data, url, resetForm);
     textInput.current.focus();
   };
 
@@ -40,15 +41,17 @@ class App extends React.Component {
     return (
       <Container fluid>
         <Row className="vh-100 pb-5">
-          <Col md={3} className="ml-1">
+          <Col md={3} className="d-flex flex-column ml-1">
             <div>{userName}</div>
             <AddChannel />
+            <Modal title="Add channel" type="addChannel" />
             <Channels />
           </Col>
           <Col className="d-flex flex-column justify-content-between h-100">
             <MessageList />
             <Input onSubmit={this.submitMesssageHandler} />
           </Col>
+          <Modal title="Add channel" type="addChannel" />
         </Row>
       </Container>
     );
