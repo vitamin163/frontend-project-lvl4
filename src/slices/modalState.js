@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const slice = createSlice({
   name: 'modalState',
-  initialState: { show: false },
+  initialState: { show: false, type: 'addChannel' },
   reducers: {
     showModal(state, { payload }) {
       return payload;

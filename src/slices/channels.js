@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import _ from 'lodash';
 
 const slice = createSlice({
   name: 'channels',
@@ -12,6 +13,11 @@ const slice = createSlice({
     renameChannel(state, { payload: { data: { attributes: channel } } }) {
       const updateById = { ...state.byId, [channel.id]: channel };
       return { ...state, byId: updateById };
+    },
+    removeChannel(state, { payload: { data: { id } } }) {
+      const updateAllIds = _.without(state.allIds, id);
+      const updateById = _.omit(state.byId, id);
+      return { byId: updateById, allIds: updateAllIds };
     },
     initState(state, { payload }) {
       const { channels } = payload;

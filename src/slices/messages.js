@@ -13,6 +13,9 @@ const slice = createSlice({
     [channelsActions.initState](state, action) {
       return action.payload.messages;
     },
+    [channelsActions.removeChannel](state, { payload: { data: { id } } }) {
+      return state.filter((message) => message.channelId !== id);
+    },
   },
 });
 

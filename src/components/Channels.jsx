@@ -29,10 +29,9 @@ const Channels = (props) => {
   const { channels, currentChannelId } = props;
   const { byId, allIds } = channels;
 
-  const handleShow = (title, type, channelId) => () => {
+  const handleShow = (type, channelId) => () => {
     showModal({
       show: true,
-      title,
       type,
       channelId,
     });
@@ -44,21 +43,24 @@ const Channels = (props) => {
 
       <ButtonGroup key={id}>
         <Button
-          className="btn-block"
           variant="secondary"
           active={isActive}
           onClick={channelSelectionHandler(id)}
+          block
         >
           {byId[id].name}
         </Button>
         <Button
           variant="secondary"
-          onClick={handleShow('Rename channel', 'renameChannel', id)}
+          onClick={handleShow('renameChannel', id)}
         >
           <img src={pencil} alt="Rename channel" title="Rename channel" />
         </Button>
-        <Button variant="secondary">
-          <img src={trash} alt="Delete channel" title="Delete channel" />
+        <Button
+          variant="secondary"
+          onClick={handleShow('removeChannel', id)}
+        >
+          <img src={trash} alt="Remove channel" title="Remove channel" />
         </Button>
       </ButtonGroup>
 

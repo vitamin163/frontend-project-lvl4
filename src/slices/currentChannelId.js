@@ -14,6 +14,9 @@ const slice = createSlice({
     [channelsActions.initState](state, action) {
       return action.payload.currentChannelId;
     },
+    [channelsActions.removeChannel]() {
+      return 1;
+    },
   },
 });
 

@@ -21,7 +21,6 @@ const AddChannel = (props) => {
     const { showModal } = props;
     showModal({
       show: true,
-      title: 'Add channel',
       type: 'addChannel',
     });
   };

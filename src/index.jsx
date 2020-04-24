@@ -12,11 +12,11 @@ import App from './components/App';
 import UserContext from './context/UserContext';
 
 const {
-  initState, addMessage, addChannel, renameChannel,
+  initState, addMessage, addChannel, renameChannel, removeChannel,
 } = actions;
 
-const userName = cookies.get('user') || faker.internet.userName();
-cookies.set('user', userName, { expires: 365 });
+const userName = cookies.get('user') || { userName: faker.internet.userName(), avatar: faker.image.avatar() };
+cookies.set('user', userName, { expires: 1 });
 
 const port = process.env.PORT || 5000;
 
@@ -30,6 +30,7 @@ export default (gon) => {
   socket.on('newMessage', (data) => store.dispatch(addMessage(data)));
   socket.on('newChannel', (data) => store.dispatch(addChannel(data)));
   socket.on('renameChannel', (data) => store.dispatch(renameChannel(data)));
+  socket.on('removeChannel', (data) => store.dispatch(removeChannel(data)));
   store.dispatch(initState({ ...gon }));
   render(
     <Provider store={store}>

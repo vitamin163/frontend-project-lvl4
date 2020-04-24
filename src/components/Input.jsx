@@ -27,19 +27,6 @@ class Input extends React.PureComponent {
     this.textInput = React.createRef();
   }
 
-  /* submitHandler = async (message, { resetForm }) => {
-    const { currentChannelId, submitMessageAction } = this.props;
-    const userName = this.context;
-    const data = {
-      attributes: {
-        ...message,
-        author: userName,
-      },
-    };
-    await submitMessageAction(data, currentChannelId, resetForm);
-    this.textInput.current.focus();
-  }; */
-
   render() {
     const { submitState, onSubmit } = this.props;
     return (
