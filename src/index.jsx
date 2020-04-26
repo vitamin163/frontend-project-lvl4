@@ -16,7 +16,7 @@ const {
 const userName = cookies.get('user') || { userName: faker.internet.userName(), avatar: faker.image.avatar() };
 cookies.set('user', userName, { expires: 1 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
 
 
 export default (gon) => {
@@ -24,7 +24,7 @@ export default (gon) => {
     reducer: reducers,
   });
 
-  const socket = io(`http://localhost:${port}`);
+  const socket = io(port);
   socket.on('newMessage', (data) => store.dispatch(addMessage(data)));
   socket.on('newChannel', (data) => store.dispatch(addChannel(data)));
   socket.on('renameChannel', (data) => store.dispatch(renameChannel(data)));
