@@ -10,5 +10,3 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 chat(gon);
-console.log('it works!');
-console.log('gon', gon);

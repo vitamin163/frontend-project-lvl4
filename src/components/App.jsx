@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Row, Col } from 'react-bootstrap';
+import {
+  Container, Row, Col, Image,
+} from 'react-bootstrap';
 import Channels from './Channels';
 import Input from './Input';
 import UserContext from '../context/UserContext';
@@ -23,39 +25,41 @@ const mapDispatchToProps = {
 };
 
 class App extends React.Component {
-  submitMesssageHandler = (textInput) => async ({ text }, { resetForm }) => {
+  user = JSON.parse(this.context);
+
+  submitMesssageHandler = async (text) => {
     const { currentChannelId, submitAsyncAction } = this.props;
     const url = routes.channelMessagesPath(currentChannelId);
-    const { userName } = JSON.parse(this.context);
+    const date = `${new Date().toLocaleTimeString()} ${new Date().toLocaleDateString()}`;
     const data = {
       attributes: {
         message: text,
-        author: userName,
+        author: this.user.userName,
+        avatar: this.user.avatar,
+        date,
       },
     };
-    try {
-      await submitAsyncAction('post', data, url);
-      textInput.current.focus();
-      resetForm({});
-    } catch (e) {
-      textInput.current.focus();
-    }
+    await submitAsyncAction('post', data, url, 'ADD_MESSAGE');
   };
 
 
   render() {
     const { modalState: { type } } = this.props;
-    const user = JSON.parse(this.context);
-    const userName = `User: ${user.userName}`;
+
+    const userName = `User: ${this.user.userName}`;
     const Modal = getModal[type];
     return (
       <Container fluid>
-        <Row className="vh-100 pb-5">
-          <Col md={3} className="d-flex flex-column ml-1">
-            <div>{userName}</div>
-            <div><img src={user.avatar} alt="Avatar" /></div>
+        <Row className="vh-100 mt-2">
+          <Col md={4} className="d-flex flex-column ml-1 h-100">
+            <div className="flex-row flex-wrap mb-2">
+              <Image src={this.user.avatar} rounded className="mr-1" />
+              {userName}
+            </div>
             <AddChannel />
-            <Channels />
+            <div className="overflow-auto mb-3">
+              <Channels />
+            </div>
           </Col>
           <Col className="d-flex flex-column justify-content-between h-100">
             <MessageList />

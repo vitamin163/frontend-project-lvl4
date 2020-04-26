@@ -28,7 +28,7 @@ const RenameChannelModal = (props) => {
     closeModal();
   };
 
-  const renameChannelHandler = (textInput) => async ({ text }) => {
+  const renameChannelHandler = async (text) => {
     const { submitAsyncAction } = props;
     const url = routes.channelPath(modalState.channelId);
     const data = {
@@ -36,12 +36,7 @@ const RenameChannelModal = (props) => {
         name: text,
       },
     };
-    try {
-      await submitAsyncAction('patch', data, url);
-      handleClose();
-    } catch {
-      textInput.current.focus();
-    }
+    await submitAsyncAction('patch', data, url, 'RENAME_CHANNEL');
   };
 
   return (

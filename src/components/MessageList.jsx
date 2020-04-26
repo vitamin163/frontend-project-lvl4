@@ -2,7 +2,6 @@ import React from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Message from './Message';
-// import { actions } from '../../slices';
 
 const mapStateToProps = (state) => {
   const props = {
@@ -18,8 +17,10 @@ const MessageList = (props) => {
   return (
     <Col className="overflow-auto">
       {currentMessages.map((message) => {
-        const { id, author, message: content } = message;
-        return <Message key={id} message={content} author={author} />;
+        const {
+          id, author, message: content, avatar, date,
+        } = message;
+        return <Message key={id} message={content} author={author} avatar={avatar} date={date} />;
       })}
     </Col>
   );

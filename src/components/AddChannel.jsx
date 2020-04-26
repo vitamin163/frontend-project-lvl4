@@ -25,11 +25,9 @@ const AddChannel = (props) => {
     });
   };
   return (
-    <>
-      <Button variant="primary" size="sm" className="mb-2" onClick={handleShow}>
-        Add channel
-      </Button>
-    </>
+    <Button variant="primary" size="sm" className="mb-2" onClick={handleShow}>
+      Add channel
+    </Button>
   );
 };
 

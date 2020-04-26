@@ -1,5 +1,5 @@
 import React from 'react';
-import { ButtonGroup, Button } from 'react-bootstrap';
+import { ListGroup, Image } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { actions } from '../slices';
 import pencil from '../img/pencil-2x.png';
@@ -29,7 +29,8 @@ const Channels = (props) => {
   const { channels, currentChannelId } = props;
   const { byId, allIds } = channels;
 
-  const handleShow = (type, channelId) => () => {
+  const handleShow = (type, channelId) => (e) => {
+    e.stopPropagation();
     showModal({
       show: true,
       type,
@@ -37,53 +38,34 @@ const Channels = (props) => {
     });
   };
 
-  const renderButton = (removable, id) => {
-    const isActive = currentChannelId === id ? 'active' : null;
-    return removable ? (
-
-      <ButtonGroup key={id}>
-        <Button
-          variant="secondary"
-          active={isActive}
-          onClick={channelSelectionHandler(id)}
-          block
-        >
-          {byId[id].name}
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={handleShow('renameChannel', id)}
-        >
-          <img src={pencil} alt="Rename channel" title="Rename channel" />
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={handleShow('removeChannel', id)}
-        >
-          <img src={trash} alt="Remove channel" title="Remove channel" />
-        </Button>
-      </ButtonGroup>
-
-    ) : (
-      <Button
-        active={isActive}
-        key={id}
-        onClick={channelSelectionHandler(id)}
-      >
-        {byId[id].name}
-      </Button>
-    );
-  };
-
   return (
-    <ButtonGroup vertical>
-
-      {allIds.map((id) => (
-        renderButton(byId[id].removable, id)
-      ))}
-    </ButtonGroup>
+    <ListGroup>
+      {allIds.map((id) => {
+        const { removable } = byId[id];
+        const isActive = currentChannelId === id ? 'active' : null;
+        return (
+          <ListGroup.Item
+            key={id}
+            className="d-flex align-items-baseline flex-wrap"
+            active={isActive}
+            action
+            variant="secondary"
+            onClick={channelSelectionHandler(id)}
+          >
+            <div className="d-block text-truncate">
+              {byId[id].name}
+            </div>
+            {removable && (
+              <div className="ml-auto">
+                <Image className="ml-2" onClick={handleShow('renameChannel', id)} src={pencil} alt="Rename channel" title="Rename channel" />
+                <Image className="ml-2" onClick={handleShow('removeChannel', id)} src={trash} alt="Remove channel" title="Remove channel" />
+              </div>
+            )}
+          </ListGroup.Item>
+        );
+      })}
+    </ListGroup>
   );
 };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Channels);

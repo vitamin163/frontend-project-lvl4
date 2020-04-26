@@ -4,14 +4,14 @@ const slice = createSlice({
   name: 'submitState',
   initialState: 'init',
   reducers: {
-    submitRequest() {
-      return 'request';
+    submitRequest(state, { payload: action }) {
+      return `${action}_REQUEST`;
     },
-    submitSuccess() {
-      return 'success';
+    submitSuccess(state, { payload: action }) {
+      return `${action}_SUCCESS`;
     },
-    submitFailure() {
-      return 'failure';
+    submitFailure(state, { payload: action }) {
+      return `${action}_FAILURE`;
     },
   },
 });

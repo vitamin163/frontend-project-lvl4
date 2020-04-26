@@ -3,6 +3,7 @@ import channels, { actions as channelsActions } from './channels';
 import messages, { actions as messagesActions } from './messages';
 import submitState, { actions as submitActions } from './submitState';
 import submitAsyncAction from './submitAsyncAction';
+import error, { actions as errorActions } from './error';
 import currentChannelId, { actions as currentChannelIdActions } from './currentChannelId';
 import modalState, { actions as modalAction } from './modalState';
 
@@ -12,6 +13,7 @@ export default combineReducers({
   submitState,
   currentChannelId,
   modalState,
+  error,
 });
 
 const actions = {
@@ -20,6 +22,7 @@ const actions = {
   ...currentChannelIdActions,
   ...modalAction,
   ...submitActions,
+  ...errorActions,
 };
 
 const asyncActions = {

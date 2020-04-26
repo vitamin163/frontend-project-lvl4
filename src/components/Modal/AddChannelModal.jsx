@@ -28,7 +28,7 @@ const AddChannelModal = (props) => {
     closeModal();
   };
 
-  const addChannelHandler = (textInput) => async ({ text }) => {
+  const addChannelHandler = async (text) => {
     const { submitAsyncAction } = props;
     const url = routes.channelsPath();
     const data = {
@@ -36,12 +36,7 @@ const AddChannelModal = (props) => {
         name: text,
       },
     };
-    try {
-      await submitAsyncAction('post', data, url);
-      handleClose();
-    } catch {
-      textInput.current.focus();
-    }
+    await submitAsyncAction('post', data, url, 'ADD_CHANNEL');
   };
 
   return (

@@ -3,12 +3,15 @@ import { connect } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
 import { actions, asyncActions } from '../../slices';
 import routes from '../../routes';
+import Error from '../Error';
 
 
 const mapStateToProps = (state) => {
   const props = {
     modalState: state.modalState,
+    submitState: state.submitState,
     currentChannelId: state.currentChannelId,
+    error: state.error,
   };
   return props;
 };
@@ -16,11 +19,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   submitAsyncAction: asyncActions.submitAsyncAction,
   closeModal: actions.closeModal,
+  setError: actions.setError,
 };
 
 const ChannelModal = (props) => {
   const {
-    modalState, closeModal,
+    modalState, closeModal, submitAsyncAction, setError, submitState, error,
   } = props;
 
   const handleClose = () => {
@@ -28,20 +32,19 @@ const ChannelModal = (props) => {
   };
 
   const removeChannelHandler = async () => {
-    const { submitAsyncAction } = props;
     const { channelId } = modalState;
     const url = routes.channelPath(channelId);
     const data = {
       id: channelId,
     };
     try {
-      await submitAsyncAction('delete', data, url);
+      await submitAsyncAction('delete', data, url, 'REMOVE_CHANNEL');
       handleClose();
     } catch (e) {
-      console.log(e);
+      setError(e.message);
+      throw (e);
     }
   };
-
 
   return (
     <Modal show={modalState.show} onHide={handleClose}>
@@ -49,9 +52,11 @@ const ChannelModal = (props) => {
         <Modal.Title>Delete channel?</Modal.Title>
       </Modal.Header>
       <Modal.Footer>
+        {submitState === 'REMOVE_CHANNEL_FAILURE' && <Error>{error}</Error>}
         <Button
           variant="primary"
           onClick={removeChannelHandler}
+          disabled={submitState === 'REMOVE_CHANNEL_REQUEST'}
         >
           Yes
         </Button>
@@ -60,7 +65,6 @@ const ChannelModal = (props) => {
           onClick={handleClose}
         >
           No
-
         </Button>
       </Modal.Footer>
     </Modal>
