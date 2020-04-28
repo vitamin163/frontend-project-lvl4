@@ -75,6 +75,14 @@ module.exports = {
         test: /\.(png|svg|jpg|jpeg|gif)$/,
         loader: 'url-loader',
       },
+      {
+        test: /favicon\.ico$/,
+        loader: 'url-loader',
+        query: {
+          limit: 1,
+          name: '[name].[ext]',
+        },
+      },
     ],
   },
 };
