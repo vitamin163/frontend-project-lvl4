@@ -18,7 +18,6 @@ const MessageList = (props) => {
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
-
   useEffect(scrollToBottom);
   return (
     <Col className="overflow-auto">

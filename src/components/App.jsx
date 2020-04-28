@@ -49,8 +49,8 @@ class App extends React.Component {
     const userName = `User: ${this.user.userName}`;
     const Modal = getModal[type];
     return (
-      <Container fluid>
-        <Row className="vh-100 mt-2">
+      <Container fluid className="overflow-auto">
+        <Row className="vh-100 pt-3">
           <Col md={4} className="d-flex flex-column ml-1 h-100">
             <div className="flex-row flex-wrap mb-2">
               <Image src={this.user.avatar} rounded className="mr-1" />
