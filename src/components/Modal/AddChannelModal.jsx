@@ -1,42 +1,29 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 import { actions, asyncActions } from '../../slices';
 import Input from '../Input';
 import routes from '../../routes';
 
+export default () => {
+  const dispatch = useDispatch();
+  const { closeModal } = actions;
+  const { submitAsyncAction } = asyncActions;
 
-const mapStateToProps = (state) => {
-  const props = {
-    modalState: state.modalState,
-    currentChannelId: state.currentChannelId,
-  };
-  return props;
-};
-
-const mapDispatchToProps = {
-  submitAsyncAction: asyncActions.submitAsyncAction,
-  closeModal: actions.closeModal,
-};
-
-const AddChannelModal = (props) => {
-  const {
-    modalState, closeModal,
-  } = props;
+  const modalState = useSelector((state) => state.modalState);
 
   const handleClose = () => {
-    closeModal();
+    dispatch(closeModal());
   };
 
   const addChannelHandler = async (text) => {
-    const { submitAsyncAction } = props;
     const url = routes.channelsPath();
     const data = {
       attributes: {
         name: text,
       },
     };
-    await submitAsyncAction('post', data, url, 'ADD_CHANNEL');
+    await dispatch(submitAsyncAction('post', data, url));
   };
 
   return (
@@ -48,5 +35,3 @@ const AddChannelModal = (props) => {
     </Modal>
   );
 };
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddChannelModal);

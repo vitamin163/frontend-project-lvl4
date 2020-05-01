@@ -1,29 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
-import _ from 'lodash';
 
 const slice = createSlice({
   name: 'channels',
-  initialState: { byId: {}, allIds: [] },
+  initialState: [],
   reducers: {
     addChannel(state, { payload: { data: { attributes: channel } } }) {
-      const updateById = { ...state.byId, [channel.id]: channel };
-      const updateAllIds = [...state.allIds, channel.id];
-      return { byId: updateById, allIds: updateAllIds };
+      state.push(channel);
     },
     renameChannel(state, { payload: { data: { attributes: channel } } }) {
-      const updateById = { ...state.byId, [channel.id]: channel };
-      return { ...state, byId: updateById };
+      const updateState = state.reduce((acc, item) => {
+        const currentChannel = item.id === channel.id ? channel : item;
+        return [...acc, currentChannel];
+      }, []);
+      return updateState;
     },
     removeChannel(state, { payload: { data: { id } } }) {
-      const updateAllIds = _.without(state.allIds, id);
-      const updateById = _.omit(state.byId, id);
-      return { byId: updateById, allIds: updateAllIds };
+      return state.filter((channel) => channel.id !== id);
     },
-    initState(state, { payload }) {
-      const { channels } = payload;
-      const allIds = channels.map((channel) => channel.id);
-      const byId = channels.reduce((acc, channel) => ({ ...acc, [channel.id]: channel }), {});
-      return { byId, allIds };
+    initState(state, { payload: { channels } }) {
+      return channels;
     },
   },
 

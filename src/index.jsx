@@ -13,13 +13,11 @@ const {
   initState, addMessage, addChannel, renameChannel, removeChannel,
 } = actions;
 
-const userName = cookies.get('user') || { userName: faker.internet.userName(), avatar: faker.image.avatar() };
-cookies.set('user', userName, { expires: 1 });
-
 const port = process.env.PORT;
 
-
 export default (gon) => {
+  const user = cookies.get('user') || { userName: faker.internet.userName(), avatar: faker.image.avatar() };
+  cookies.set('user', user, { expires: 1 });
   const store = configureStore({
     reducer: reducers,
   });

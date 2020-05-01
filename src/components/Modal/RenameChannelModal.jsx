@@ -1,42 +1,28 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 import { actions, asyncActions } from '../../slices';
 import Input from '../Input';
 import routes from '../../routes';
 
-
-const mapStateToProps = (state) => {
-  const props = {
-    modalState: state.modalState,
-    currentChannelId: state.currentChannelId,
-  };
-  return props;
-};
-
-const mapDispatchToProps = {
-  submitAsyncAction: asyncActions.submitAsyncAction,
-  closeModal: actions.closeModal,
-};
-
-const RenameChannelModal = (props) => {
-  const {
-    modalState, closeModal,
-  } = props;
+export default () => {
+  const dispatch = useDispatch();
+  const { closeModal } = actions;
+  const { submitAsyncAction } = asyncActions;
 
   const handleClose = () => {
-    closeModal();
+    dispatch(closeModal());
   };
+  const modalState = useSelector((state) => state.modalState);
 
   const renameChannelHandler = async (text) => {
-    const { submitAsyncAction } = props;
     const url = routes.channelPath(modalState.channelId);
     const data = {
       attributes: {
         name: text,
       },
     };
-    await submitAsyncAction('patch', data, url, 'RENAME_CHANNEL');
+    await dispatch(submitAsyncAction('patch', data, url));
   };
 
   return (
@@ -48,5 +34,3 @@ const RenameChannelModal = (props) => {
     </Modal>
   );
 };
-
-export default connect(mapStateToProps, mapDispatchToProps)(RenameChannelModal);

@@ -1,47 +1,33 @@
 import React from 'react';
 import { ListGroup, Image } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../slices';
 import pencil from '../img/pencil-2x.png';
 import trash from '../img/trash-2x.png';
 
-
-const mapStateToProps = (state) => {
-  const props = {
-    channels: state.channels,
-    currentChannelId: state.currentChannelId,
-  };
-  return props;
-};
-
-const mapDispatchToProps = {
-  channelSelection: actions.channelSelection,
-  showModal: actions.showModal,
-};
-
-const Channels = (props) => {
-  const { channelSelection, showModal } = props;
+export default () => {
+  const dispatch = useDispatch();
+  const { channelSelection, showModal } = actions;
 
   const channelSelectionHandler = (id) => () => {
-    channelSelection({ id });
+    dispatch(channelSelection({ id }));
   };
 
-  const { channels, currentChannelId } = props;
-  const { byId, allIds } = channels;
+  const channels = useSelector((state) => state.channels);
+  const currentChannelId = useSelector((state) => state.currentChannelId);
 
   const handleShow = (type, channelId) => (e) => {
     e.stopPropagation();
-    showModal({
+    dispatch(showModal({
       show: true,
       type,
       channelId,
-    });
+    }));
   };
-
   return (
     <ListGroup>
-      {allIds.map((id) => {
-        const { removable } = byId[id];
+      {channels.map((channel) => {
+        const { removable, id, name } = channel;
         const isActive = currentChannelId === id ? 'active' : null;
         return (
           <ListGroup.Item
@@ -53,7 +39,7 @@ const Channels = (props) => {
             onClick={channelSelectionHandler(id)}
           >
             <div className="d-block text-truncate">
-              {byId[id].name}
+              {name}
             </div>
             {removable && (
               <div className="ml-auto">
@@ -67,5 +53,3 @@ const Channels = (props) => {
     </ListGroup>
   );
 };
-
-export default connect(mapStateToProps, mapDispatchToProps)(Channels);
