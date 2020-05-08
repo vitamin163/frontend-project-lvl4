@@ -7,12 +7,9 @@ const slice = createSlice({
     addChannel(state, { payload: { data: { attributes: channel } } }) {
       state.push(channel);
     },
-    renameChannel(state, { payload: { data: { attributes: channel } } }) {
-      const updateState = state.reduce((acc, item) => {
-        const currentChannel = item.id === channel.id ? channel : item;
-        return [...acc, currentChannel];
-      }, []);
-      return updateState;
+    renameChannel(state, { payload: { data: { attributes: { id, name } } } }) {
+      const currentChannel = state.find((channel) => channel.id === id);
+      currentChannel.name = name;
     },
     removeChannel(state, { payload: { data: { id } } }) {
       return state.filter((channel) => channel.id !== id);

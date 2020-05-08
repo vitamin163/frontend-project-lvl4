@@ -1,14 +1,14 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 import { Modal } from 'react-bootstrap';
-import { actions, asyncActions } from '../../slices';
+import { actions } from '../../slices';
 import Input from '../Input';
 import routes from '../../routes';
 
 export default () => {
   const dispatch = useDispatch();
   const { closeModal } = actions;
-  const { submitAsyncAction } = asyncActions;
 
   const modalState = useSelector((state) => state.modalState);
 
@@ -23,7 +23,7 @@ export default () => {
         name: text,
       },
     };
-    await dispatch(submitAsyncAction('post', data, url));
+    await axios.post(url, { data });
   };
 
   return (

@@ -8,35 +8,31 @@ import * as Yup from 'yup';
 import { actions } from '../slices';
 import Error from './Error';
 
+const validationMessage = Yup.object().shape({
+  text: Yup.string()
+    .required('Write message'),
+});
 
 export default (props) => {
-  const validationMessage = Yup.object().shape({
-    text: Yup.string()
-      .required('Write message'),
-  });
-
   const dispatch = useDispatch();
-  const textInput = useRef(null);
+  const inputRef = useRef(null);
   const { closeModal } = actions;
 
   const handleClose = () => {
     dispatch(closeModal());
   };
 
-  const focus = () => textInput.current.focus();
-  useEffect(focus);
+  const setFocus = () => inputRef.current.focus();
+  useEffect(setFocus);
 
-  const handleSubmit = async ({ text }, { resetForm, setSubmitting, setErrors }) => {
+  const handleSubmit = async ({ text }, { resetForm, setErrors }) => {
     const { onSubmit } = props;
     try {
       await onSubmit(text);
-      resetForm({});
+      resetForm();
       handleClose();
-      focus();
     } catch (e) {
-      setSubmitting(false);
       setErrors({ text: e.message });
-      focus();
     }
   };
 
@@ -59,7 +55,7 @@ export default (props) => {
                     value={field.value}
                     onChange={field.onChange}
                     disabled={isSubmitting}
-                    ref={textInput}
+                    ref={inputRef}
                   />
                   <Button variant="primary" type="submit" className="ml-1" disabled={isSubmitting}>
                     Submit

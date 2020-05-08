@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 import {
   Container, Row, Col, Image,
 } from 'react-bootstrap';
@@ -8,13 +9,10 @@ import Input from './Input';
 import UserContext from '../context/UserContext';
 import MessageList from './MessageList';
 import AddChannel from './AddChannel';
-import { asyncActions } from '../slices';
 import routes from '../routes';
 import getModal from './Modal';
 
 export default () => {
-  const dispatch = useDispatch();
-  const { submitAsyncAction } = asyncActions;
   const modalState = useSelector((state) => state.modalState);
   const currentChannelId = useSelector((state) => state.currentChannelId);
   const context = useContext(UserContext);
@@ -31,7 +29,7 @@ export default () => {
         date,
       },
     };
-    await dispatch(submitAsyncAction('post', data, url));
+    await axios.post(url, { data });
   };
 
   const { type } = modalState;

@@ -1,40 +1,35 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import {
+  Formik, Form, ErrorMessage,
+} from 'formik';
 import { Modal, Button } from 'react-bootstrap';
-import { actions, asyncActions } from '../../slices';
+import { actions } from '../../slices';
 import routes from '../../routes';
 import Error from '../Error';
 
 export default () => {
   const dispatch = useDispatch();
-  const {
-    closeModal, setError, removeRequest, removeSuccess, removeFailure,
-  } = actions;
-  const { submitAsyncAction } = asyncActions;
+  const { closeModal } = actions;
 
   const modalState = useSelector((state) => state.modalState);
-  const removeState = useSelector((state) => state.removeState);
-  const error = useSelector((state) => state.error);
 
   const handleClose = () => {
     dispatch(closeModal());
   };
 
-  const removeChannelHandler = async () => {
+  const removeChannelHandler = async (removeChannel, { setErrors }) => {
     const { channelId } = modalState;
     const url = routes.channelPath(channelId);
     const data = {
       id: channelId,
     };
-    removeRequest();
     try {
-      await dispatch(submitAsyncAction('delete', data, url));
+      await axios.delete(url, { data });
       handleClose();
-      dispatch(removeSuccess());
     } catch (e) {
-      dispatch(setError(e.message));
-      dispatch(removeFailure());
-      throw (e);
+      setErrors({ removeChannel: e.message });
     }
   };
 
@@ -44,20 +39,26 @@ export default () => {
         <Modal.Title>Delete channel?</Modal.Title>
       </Modal.Header>
       <Modal.Footer>
-        {removeState === 'REMOVE_CHANNEL_FAILURE' && <Error>{error}</Error>}
-        <Button
-          variant="primary"
-          onClick={removeChannelHandler}
-          disabled={removeState === 'REMOVE_CHANNEL_REQUEST'}
+        <Formik
+          initialValues={{ removeChannel: null }}
+          onSubmit={removeChannelHandler}
         >
-          Yes
-        </Button>
-        <Button
-          variant="primary"
-          onClick={handleClose}
-        >
-          No
-        </Button>
+          {({ isSubmitting }) => (
+            <Form>
+              <ErrorMessage component={Error} name="removeChannel" />
+              <Button variant="primary" type="submit" className="mr-1" disabled={isSubmitting}>
+                Yes
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleClose}
+                disabled={isSubmitting}
+              >
+                No
+              </Button>
+            </Form>
+          )}
+        </Formik>
       </Modal.Footer>
     </Modal>
   );
